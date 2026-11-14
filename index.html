@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SBC Project Hub</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" content="#363231">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SBC Hub">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#1b2126;--hero:#363231;--card:#262e35;--line:#37414a;--tx:#f4f6f7;--mut:#9aa5ae;--ac:#c4cdd4;--btn:#fff;--btt:#1b2126;--ok:#3fbf7f;--warn:#e8b94a;--bad:#e5666b;--in:#6aa7ff;color-scheme:dark}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef0f1;--card:#fff;--line:#d9dee2;--tx:#1b2126;--mut:#5f6b75;--ac:#4b5863;--btn:#1f262b;--btt:#fff;color-scheme:light}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 Poppins,system-ui,-apple-system,Segoe UI,sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
+header{position:sticky;top:0;z-index:5;background:#fff;color:#1b2126;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;border-bottom:1px solid #d5d9dc}
+.hlogo{height:46px;cursor:pointer;display:block}
+header .out{margin-left:auto;background:none;border:1px solid #c9ced2;border-radius:8px;padding:6px 10px;font:600 12px Poppins,sans-serif;color:#1b2126;cursor:pointer}
+.hero{background:var(--hero);text-align:center;padding:6px 16px 18px;color:#f4f6f7}
+.hero img{width:min(100%,400px);display:block;margin:0 auto}
+.hero p{margin:2px 0 0;letter-spacing:3px;font-size:11px;color:#9aa5ae;text-transform:uppercase}
+main{max-width:980px;margin:0 auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.proj{cursor:pointer}.proj:hover{border-color:var(--ac)}
+.proj h3{margin:0 0 2px;font-size:16px}.mut{color:var(--mut);font-size:13px}
+.stats{display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--mut)}.stats b{display:block;color:var(--tx);font-size:18px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0 14px;flex-wrap:wrap}
+h2{margin:0;font-size:20px;font-weight:700}
+.btn{background:var(--btn);color:var(--btt);border:0;border-radius:10px;padding:9px 16px;font:600 14px Poppins,system-ui,sans-serif;cursor:pointer;display:inline-block;text-decoration:none}
+.btn.g{background:transparent;color:var(--tx);border:1px solid var(--line)}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:14px}
+.tab{padding:10px 14px;cursor:pointer;color:var(--mut);white-space:nowrap;border-bottom:3px solid transparent;font-weight:600}
+.tab.on{color:var(--tx);border-color:var(--ac)}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;margin-bottom:8px}
+.item .id{color:var(--ac);font-weight:700;font-size:12px;letter-spacing:.5px}.item .t{font-weight:600}
+.chip{font:700 11px Poppins,system-ui,sans-serif;padding:4px 10px;border-radius:99px;border:1px solid currentColor;background:none;cursor:pointer}
+.xb{background:none;border:0;color:var(--mut);cursor:pointer;font:12px Poppins,sans-serif;padding:2px 6px 2px 0}
+.tag{text-align:right;font-size:11px;font-weight:700;margin-top:4px}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ph{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.ph img{width:100%;aspect-ratio:1;object-fit:cover;display:block;cursor:pointer}.ph div{padding:6px 8px;font-size:12px}
+.x{position:absolute;top:4px;right:4px;background:#000a;color:#fff;border:0;border-radius:6px;width:26px;height:26px;cursor:pointer}
+.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:flex-end;justify-content:center;z-index:30}
+.modal form{background:var(--card);width:100%;max-width:460px;padding:18px;border-radius:16px 16px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+.modal label{display:block;font-size:12px;color:var(--mut);margin:10px 0 3px}
+.modal input,.modal select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--tx);font-size:16px}
+.empty{text-align:center;color:var(--mut);padding:30px}
+.note{font-size:12px;color:var(--mut);margin-top:24px;text-align:center}
+.banner{background:var(--card);border:1px solid var(--warn);color:var(--warn);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px}
+.fb{display:flex;gap:8px;margin-bottom:12px}.fb input{flex:1;min-width:0}
+.fb input,.fb select{padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:14px Poppins,system-ui,sans-serif}
+#lock{position:fixed;inset:0;z-index:50;background:#363231;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;color:#f4f6f7}
+#lock img{width:min(80%,360px)}
+#lock input{width:min(80%,300px);padding:12px;border-radius:10px;border:1px solid #6b6564;background:#262221;color:#fff;font-size:16px;text-align:center}
+#lock .btn{width:min(80%,300px);background:#fff;color:#1b2126}#lerr{color:#ff8a8f;font-size:13px;min-height:18px}
+.viewer,.lightbox{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.vbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--card);font-size:13px}
+.vbar .btn{padding:6px 11px;font-size:13px}.vbar select{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:6px;font-size:14px}
+.vt{flex-basis:100%;font-weight:700}
+.vbody{flex:1;overflow:auto;padding:8px;text-align:center;padding-bottom:env(safe-area-inset-bottom,0px)}
+#cv{background:#fff;box-shadow:0 2px 12px #0008;max-width:none}#vmsg{color:var(--mut);padding:30px}
+.lightbox img{max-width:100%;max-height:100%;margin:auto;object-fit:contain}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head><body>
+<div id="lock"><img src="logo.jpg" alt="Southern Built Construction LLC"><input id="pw" type="password" placeholder="Password" autocomplete="current-password"><button class="btn" id="go">Unlock</button><div id="lerr"></div></div>
+<header><img class="hlogo" src="logo.jpg" alt="Southern Built Construction LLC" onclick="goHome()"><div><div style="font-weight:700;font-size:14px;line-height:1.1">Project Hub</div><div style="font-size:10px;color:#5f6b75;letter-spacing:1px">COMMON DATA ENVIRONMENT</div></div><button class="out" onclick="lockOut()">Lock</button></header>
+<div class="hero"><img src="logo.jpg" alt=""><p>Project Hub · Common Data Environment</p></div>
+<main id="app"><div class="empty">Loading…</div></main>
+<script>
+/* ---------- CONFIG ---------- */
+const SB_URL='https://jmniiphnxyxkjkyfonnj.supabase.co';
+const SB_KEY='sb_publishable_Vvq-SKwxqfMUl6NWpKATQQ_xvUYKTZi';
+const EMAIL='hub@southernbco.com',BUCKET='files';
+/* ---------------------------- */
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const ST={rfi:['Open','Answered','Closed'],sub:['Pending','In Review','Approved','Rejected'],dr:['Preliminary','IFC','Superseded']};
+const COL={Open:'--warn',Answered:'--in',Closed:'--ok',Pending:'--warn','In Review':'--in',Approved:'--ok',Rejected:'--bad',Preliminary:'--warn',IFC:'--ok',Superseded:'--mut'};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let projects=[],items=[],URLS={},V={p:null,tab:'dr',q:'',st:''},VW=null,booted=false;
+const toast=m=>alert(m);
+const today=()=>new Date().toLocaleDateString('en-CA');
+const isOpen=x=>['Open','Pending','In Review'].includes(x.status);
+const over=x=>!!x.due&&isOpen(x)&&x.due<today();
+const rv=d=>d.revs||[];
+const cur=d=>{const r=rv(d);return r[r.length-1]||{rev:d.rev}};
+const I=(k,p=V.p)=>items.filter(i=>i.pid==p&&i.kind==k);
+const dueTag=x=>{const c=over(x)?'--bad':(x.due&&isOpen(x)&&(new Date(x.due+'T00:00')-new Date(today()+'T00:00'))/864e5<=3?'--warn':'');return c?`<div class="tag" style="color:var(${c})">${c=='--bad'?'OVERDUE':'DUE SOON'}</div>`:''};
+const chip=(s,fn)=>`<button class="chip" style="color:var(${COL[s]||'--mut'})" onclick="${fn}">${esc(s)}</button>`;
+
+/* ---------- login ---------- */
+async function login(){const pw=document.getElementById('pw').value,e=document.getElementById('lerr');e.textContent='';
+ const{error}=await sb.auth.signInWithPassword({email:EMAIL,password:pw});
+ if(error){e.textContent='Incorrect password';return}
+ document.getElementById('lock').style.display='none';boot()}
+async function lockOut(){await sb.auth.signOut();location.reload()}
+document.getElementById('go').onclick=login;
+document.getElementById('pw').onkeydown=e=>{if(e.key=='Enter')login()};
+(async()=>{const{data}=await sb.auth.getSession();if(data.session){document.getElementById('lock').style.display='none';boot()}})();
+
+/* ---------- data ---------- */
+async function boot(){if(booted)return;booted=true;await load();
+ try{sb.channel('hub').on('postgres_changes',{event:'*',schema:'public',table:'items'},load).on('postgres_changes',{event:'*',schema:'public',table:'projects'},load).subscribe()}catch(e){}}
+async function load(){
+ const[a,b]=await Promise.all([sb.from('projects').select('*').order('created'),sb.from('items').select('*').order('created')]);
+ if(a.error||b.error){document.getElementById('app').innerHTML='<div class="banner">Couldn’t load data. Check that the database setup (SQL) was run, then reload.</div>';return}
+ projects=a.data;items=b.data.map(r=>({...r.data,id:r.id,pid:r.pid,kind:r.kind,created:r.created}));
+ const paths=items.filter(i=>i.kind=='ph'&&i.path).map(i=>i.path);
+ if(paths.length){const{data}=await sb.storage.from(BUCKET).createSignedUrls(paths,3600);(data||[]).forEach(x=>{if(x.signedUrl)URLS[x.path]=x.signedUrl})}
+ render()}
+const strip=o=>{const{id,pid,kind,created,...d}=o;return d};
+async function w(fn){try{const r=await fn();if(r&&r.error)throw r.error}catch(e){toast('Couldn’t save: '+(e.message||'you may be signed out. Lock and sign in again.'))}await load()}
+const addItem=(kind,d)=>sb.from('items').insert({pid:V.p,kind,data:d});
+const cyc=(id,s)=>{const o=items.find(x=>x.id==id),L=ST[s],n=L[(L.indexOf(o.status)+1)%L.length];w(()=>sb.from('items').update({data:{...strip(o),status:n}}).eq('id',id))};
+async function del(id){if(!confirm('Delete this item?'))return;const o=items.find(x=>x.id==id);const ps=[o.path,...rv(o).map(r=>r.path)].filter(Boolean);w(async()=>{if(ps.length)await sb.storage.from(BUCKET).remove(ps);return sb.from('items').delete().eq('id',id)})}
+async function up(file,kind){const p=`${V.p}/${kind}/${crypto.randomUUID()}-${file.name.replace(/[^\w.-]/g,'_')}`;const{error}=await sb.storage.from(BUCKET).upload(p,file,{contentType:file.type||'application/octet-stream'});if(error)throw error;return p}
+const signed=async p=>(await sb.storage.from(BUCKET).createSignedUrl(p,3600)).data?.signedUrl;
+
+/* ---------- views ---------- */
+function goHome(){V.p=null;render()}
+function go(p,t){V.p=p;if(t){V.tab=t;V.q='';V.st=''}render()}
+function render(){const a=document.getElementById('app');if(VW&&document.getElementById('vw'))bar();const y=window.scrollY;(V.p&&projects.find(p=>p.id==V.p))?proj(a):home(a);window.scrollTo(0,y)}
+function att(){const o=items.filter(over);if(!o.length)return'';return`<div class="card" style="border-color:var(--bad);margin-bottom:14px"><b style="color:var(--bad)">⚠ ${o.length} overdue</b>${o.slice(0,5).map(x=>`<div class="mut" style="cursor:pointer;margin-top:4px" onclick="go('${x.pid}','${x.kind}')">${esc((projects.find(p=>p.id==x.pid)||{}).name)} · ${x.kind=='rfi'?'RFI':'Submittal'}: ${esc(x.title)} (due ${esc(x.due)})</div>`).join('')}</div>`}
+function home(a){V.p=null;
+ a.innerHTML=`${att()}<div class="row"><h2>Projects</h2><button class="btn" onclick="addProj()">+ New Project</button></div>${projects.length?`<div class="grid">${projects.map(p=>`<div class="card proj" onclick="go('${p.id}','dr')"><h3>${esc(p.name)}</h3><div class="mut">${esc(p.type)} · ${esc(p.addr)}</div><div class="stats"><span><b>${I('dr',p.id).length}</b>Drawings</span><span><b>${I('rfi',p.id).filter(r=>r.status=='Open').length}</b>Open RFIs</span><span><b>${I('sub',p.id).filter(isOpen).length}</b>Submittals</span><span><b>${I('ph',p.id).length}</b>Photos</span></div></div>`).join('')}</div>`:'<div class="empty">No projects yet.<br><br><button class="btn" onclick="addProj()">+ New Project</button> <button class="btn g" onclick="seed()">Load sample projects</button></div>'}<p class="note">Shared with everyone who has the team password · changes sync live</p>`}
+function match(x){const q=(V.q||'').toLowerCase(),s=V.st||'';if(s=='Overdue'&&!over(x))return false;if(s&&s!='Overdue'&&x.status!==s)return false;return!q||[x.no,x.title,x.disc,x.to,x.spec,x.cap,x.status,x.rev].join(' ').toLowerCase().includes(q)}
+function fbar(k){const o=k=='ph'?'':['',...ST[k],...(k=='dr'?[]:['Overdue'])].map(s=>`<option value="${s}" ${(V.st||'')==s?'selected':''}>${s||'All statuses'}</option>`).join('');return`<div class="fb"><input id="q" placeholder="Search…" value="${esc(V.q||'')}" oninput="V.q=this.value;render();const e=document.getElementById('q');e.focus();e.setSelectionRange(e.value.length,e.value.length)">${o?`<select onchange="V.st=this.value;render()">${o}</select>`:''}</div>`}
+function list(arr,f,name,add){return`<div class="row"><span class="mut">${arr.length} ${name}s</span><span><button class="btn g" onclick="exportCsv()">Export CSV</button> <button class="btn" onclick="${add}">+ Add ${name}</button></span></div>`+(arr.length?arr.map(x=>{const[i,t,m,c]=f(x);return`<div class="card item"><div><div class="id">${esc(i)}</div><div class="t">${esc(t)}</div><div class="mut">${m}</div></div>${c}</div>`}).join(''):`<div class="empty">No ${name}s yet</div>`)}
+function proj(a){const p=projects.find(x=>x.id==V.p),T=[['dr','Drawings'],['rfi','RFIs'],['sub','Submittals'],['ph','Photos']],k=V.tab,ALL=I(k),L=ALL.filter(match);let body='';
+ const dl=i=>`<button class="xb" onclick="del('${i.id}')">Delete</button>`,pad=(pre,i)=>pre+String(ALL.indexOf(i)+1).padStart(3,'0');
+ if(k=='dr')body=list(L,d=>[d.no+' · Rev '+cur(d).rev,d.title,esc(d.disc)+' · '+rv(d).length+' rev(s) <button class="xb" onclick="view(\''+d.id+'\')">📄 View</button>'+dl(d),chip(d.status,`cyc('${d.id}','dr')`)],'drawing','addDr()');
+ if(k=='rfi')body=list(L,r=>[pad('RFI-',r),r.title,'To '+esc(r.to)+' · Due '+esc(r.due)+' '+dl(r),'<div>'+chip(r.status,`cyc('${r.id}','rfi')`)+dueTag(r)+'</div>'],'RFI','addRfi()');
+ if(k=='sub')body=list(L,s=>[pad('SUB-',s)+' · Spec '+s.spec,s.title,(s.due?'Due '+esc(s.due)+' ':'')+dl(s),'<div>'+chip(s.status,`cyc('${s.id}','sub')`)+dueTag(s)+'</div>'],'submittal','addSub()');
+ if(k=='ph')body=`<div class="row"><span class="mut">${L.length} photos</span><label class="btn">+ Upload<input type="file" accept="image/*" multiple hidden onchange="upPh(this)"></label></div>${L.length?`<div class="photos">${L.map(f=>`<div class="ph"><img src="${esc(URLS[f.path]||'')}" alt="" onclick="light('${f.id}')"><button class="x" onclick="del('${f.id}')">×</button><div>${esc(f.cap)}<br><span class="mut">${esc(f.date)}</span></div></div>`).join('')}</div>`:'<div class="empty">No photos yet</div>'}`;
+ a.innerHTML=`<div class="row"><button class="btn g" onclick="goHome()">← Projects</button></div><h2>${esc(p.name)}</h2><div class="mut" style="margin-bottom:12px">${esc(p.type)} · ${esc(p.addr)}</div><div class="tabs">${T.map(t=>`<div class="tab ${k==t[0]?'on':''}" onclick="go('${p.id}','${t[0]}')">${t[1]}</div>`).join('')}</div>${fbar(k)}${body}`}
+function light(id){const f=items.find(x=>x.id==id),m=document.createElement('div');m.className='lightbox';m.innerHTML=`<div class="vbar"><div class="vt">${esc(f.cap)}</div><button class="btn g" onclick="this.closest('.lightbox').remove()">✕ Close</button></div><img src="${esc(URLS[f.path]||'')}" alt="">`;document.body.appendChild(m)}
+
+/* ---------- forms ---------- */
+function form(title,fs,cb){const m=document.createElement('div');m.className='modal';m.innerHTML=`<form><h2 style="margin-bottom:6px">${title}</h2>${fs.map(f=>`<label>${f[1]}</label>${f[2]?`<select name="${f[0]}">${f[2].map(o=>`<option>${o}</option>`).join('')}</select>`:`<input name="${f[0]}" ${f[3]||''} ${/file|data-opt/.test(f[3]||'')?'':'required'}>`}`).join('')}<div class="row" style="margin:16px 0 0"><button type="button" class="btn g" id="c">Cancel</button><button class="btn">Save</button></div></form>`;
+ document.body.appendChild(m);m.querySelector('#c').onclick=()=>m.remove();m.onclick=e=>{if(e.target==m)m.remove()};
+ m.querySelector('form').onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target));m.remove();w(()=>cb(d))}}
+const mkRev=async(f,rev,note)=>({rev,path:await up(f,'dr'),date:new Date().toLocaleDateString(),note,name:f.name});
+function addProj(){form('New Project',[['name','Project name'],['addr','Location'],['type','Type',['Commercial','Residential','Barn / Pole Barn','Remodel']]],d=>sb.from('projects').insert(d))}
+function addDr(){form('Add Drawing',[['no','Sheet number','','placeholder="A-101"'],['title','Title'],['disc','Discipline',['Architectural','Structural','Civil','MEP','Other']],['rev','Revision','','value="A"'],['status','Status',ST.dr],['file','Drawing PDF (optional)','','type="file" accept="application/pdf"']],async d=>{const f=d.file;delete d.file;const revs=f&&f.size?[await mkRev(f,d.rev,'Initial issue')]:[];return addItem('dr',{...d,revs})})}
+function addRfi(){form('New RFI',[['title','Subject'],['to','Directed to'],['due','Due date','','type="date"'],['status','Status',ST.rfi]],d=>addItem('rfi',d))}
+function addSub(){form('New Submittal',[['title','Description'],['spec','Spec section','','placeholder="08 41 13"'],['due','Due date (optional)','','type="date" data-opt'],['status','Status',ST.sub]],d=>addItem('sub',d))}
+const shrink=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?ok(new File([b],f.name.replace(/\.\w+$/,'')+'.jpg',{type:'image/jpeg'})):no(),'image/jpeg',.82)};im.onerror=no;im.src=r.result};r.onerror=no;r.readAsDataURL(f)});
+async function upPh(inp){const fs=[...inp.files];inp.value='';for(const f of fs){await w(async()=>{const b=await shrink(f),path=await up(b,'ph');return addItem('ph',{path,cap:f.name.replace(/\.\w+$/,''),date:new Date().toLocaleDateString()})})}}
+
+/* ---------- PDF viewer + revisions ---------- */
+function view(id){VW={id,i:rv(items.find(x=>x.id==id)).length-1,pg:1,n:0,sc:1};const m=document.createElement('div');m.className='viewer';m.id='vw';m.innerHTML='<div class="vbar" id="vbar"></div><div class="vbody" id="vbody"><div id="vmsg"></div><canvas id="cv"></canvas></div>';document.body.appendChild(m);loadPdf()}
+function closeV(){const m=document.getElementById('vw');if(m)m.remove();VW=null}
+function bar(){const d=items.find(x=>x.id==VW.id);if(!d){closeV();return}const R=rv(d),r=R[VW.i];document.getElementById('vbar').innerHTML=`<div class="vt">${esc(d.no)} · ${esc(d.title)}</div>${R.length?`<select onchange="VW.i=+this.value;loadPdf()">${R.map((x,i)=>`<option value="${i}" ${i==VW.i?'selected':''}>Rev ${esc(x.rev)} · ${esc(x.date)}${i==R.length-1?' (current)':''}</option>`).join('')}</select>`:''}<span>${VW.pg}/${VW.n||'–'}</span><button class="btn g" onclick="pg(-1)">‹</button><button class="btn g" onclick="pg(1)">›</button><button class="btn g" onclick="zm(.25)">+</button><button class="btn g" onclick="zm(-.25)">−</button>${r?`<button class="btn g" onclick="openPdf()">Open</button>`:''}<button class="btn" onclick="newRev()">+ Revision</button><button class="btn g" onclick="closeV()">✕</button>${r&&r.note?`<div class="mut vt" style="font-weight:400">${esc(r.note)}</div>`:''}`}
+async function openPdf(){const r=rv(items.find(x=>x.id==VW.id))[VW.i],u=await signed(r.path);if(u)window.open(u,'_blank')}
+async function loadPdf(){const d=items.find(x=>x.id==VW.id),r=rv(d)[VW.i],cv=document.getElementById('cv'),msg=document.getElementById('vmsg');VW.pg=1;VW.n=0;VW.doc=null;cv.style.display='none';bar();if(!r){msg.textContent='No PDF attached yet. Tap “+ Revision” to upload one.';return}msg.textContent='Loading…';const mine=r.path;
+ try{pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';const u=await signed(r.path),buf=await(await fetch(u)).arrayBuffer(),doc=await pdfjsLib.getDocument({data:buf}).promise;if(!VW||rv(items.find(x=>x.id==VW.id))[VW.i]?.path!==mine)return;VW.doc=doc;VW.n=doc.numPages;msg.textContent='';cv.style.display='inline-block';paint()}
+ catch(e){msg.innerHTML='Couldn’t render this PDF here. Tap <b>Open</b> above to view it in a new tab.'}}
+async function paint(){if(!VW||!VW.doc)return;if(VW.busy){VW.again=true;return}VW.busy=true;try{const p=await VW.doc.getPage(VW.pg),cv=document.getElementById('cv'),b=document.getElementById('vbody'),dp=window.devicePixelRatio||1,base=(b.clientWidth-16)/p.getViewport({scale:1}).width,vp=p.getViewport({scale:base*VW.sc*dp});cv.width=vp.width;cv.height=vp.height;cv.style.width=vp.width/dp+'px';await p.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;bar()}catch(e){}if(VW){VW.busy=false;if(VW.again){VW.again=false;paint()}}}
+const pg=n=>{if(VW&&VW.doc){VW.pg=Math.min(VW.n,Math.max(1,VW.pg+n));paint()}};
+const zm=n=>{if(VW&&VW.doc){VW.sc=Math.min(4,Math.max(.5,VW.sc+n));paint()}};
+function newRev(){const d=items.find(x=>x.id==VW.id),R=rv(d);form('New Revision',[['rev','Revision','','value="'+(R.length?String.fromCharCode(65+R.length):'A')+'"'],['note','What changed'],['file','PDF','','type="file" accept="application/pdf"']],async x=>{if(!x.file||!x.file.size)throw{message:'Choose a PDF first.'};const rev=await mkRev(x.file,x.rev,x.note),all=[...R,rev];const r=await sb.from('items').update({data:{...strip(d),revs:all,rev:x.rev}}).eq('id',d.id);if(!r.error&&VW&&VW.id==d.id){setTimeout(()=>{VW.i=all.length-1;loadPdf()},400)}return r})}
+
+/* ---------- CSV ---------- */
+function exportCsv(){const p=projects.find(x=>x.id==V.p),k=V.tab,all=I(k),R=all.filter(match),n=x=>String(all.indexOf(x)+1).padStart(3,'0');
+ const H={dr:['Sheet','Title','Discipline','Current Rev','Status','Revisions'],rfi:['RFI #','Subject','Directed To','Due','Status','Overdue'],sub:['Submittal #','Description','Spec Section','Due','Status','Overdue']}[k];
+ const row=x=>k=='dr'?[x.no,x.title,x.disc,cur(x).rev,x.status,rv(x).length]:k=='rfi'?['RFI-'+n(x),x.title,x.to,x.due,x.status,over(x)?'Yes':'No']:['SUB-'+n(x),x.title,x.spec,x.due||'',x.status,over(x)?'Yes':'No'];
+ const c=v=>{let s=String(v??'');if(/^[=+\-@]/.test(s))s="'"+s;return'"'+s.replace(/"/g,'""')+'"'};
+ const csv='\ufeff'+[H,...R.map(row)].map(r=>r.map(c).join(',')).join('\r\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=(p.name+' - '+{dr:'Drawing Log',rfi:'RFI Log',sub:'Submittal Log'}[k]).replace(/[^\w .-]/g,'')+'.csv';document.body.appendChild(a);a.click();a.remove()}
+
+/* ---------- sample data ---------- */
+async function seed(){const d=n=>{const t=new Date();t.setDate(t.getDate()+n);return t.toLocaleDateString('en-CA')};
+ const S=[['WokBotic Hotpot – Restaurant Remodel','Texas','Commercial',[['dr',{no:'A-101',title:'Floor Plan',disc:'Architectural',rev:'B',status:'IFC',revs:[]}],['dr',{no:'MEP-101',title:'Kitchen Equipment Plan',disc:'MEP',rev:'A',status:'Preliminary',revs:[]}],['rfi',{title:'Hood exhaust routing conflict at kitchen',to:'Architect',due:d(-4),status:'Open'}],['rfi',{title:'Hotpot table gas line locations',to:'Architect',due:d(10),status:'Open'}],['sub',{title:'Kitchen exhaust hood',spec:'23 38 13',due:d(3),status:'In Review'}]]],
+ ['Sample: Residential New Build','Katy, TX','Residential',[['dr',{no:'A-001',title:'Elevations',disc:'Architectural',rev:'B',status:'IFC',revs:[]}],['dr',{no:'S-101',title:'Foundation Plan',disc:'Structural',rev:'A',status:'IFC',revs:[]}],['rfi',{title:'Window header sizing at great room',to:'Engineer',due:d(7),status:'Open'}],['sub',{title:'Roofing shingles',spec:'07 31 13',due:d(18),status:'Pending'}]]],
+ ['Sample: Pole Barn / Barndominium','Fulshear, TX','Barn / Pole Barn',[['dr',{no:'S-001',title:'Barn Framing Plan',disc:'Structural',rev:'A',status:'IFC',revs:[]}],['rfi',{title:'Overhead door rough opening',to:'Supplier',due:d(2),status:'Open'}],['sub',{title:'Metal roof and wall panels',spec:'07 41 13',due:d(16),status:'Pending'}]]],
+ ['Sample: Retail Build-Out','Sugar Land, TX','Commercial',[['dr',{no:'A-501',title:'Storefront Details',disc:'Architectural',rev:'A',status:'Preliminary',revs:[]}],['rfi',{title:'Storefront header height conflict',to:'Architect',due:d(-2),status:'Open'}],['sub',{title:'Storefront glazing',spec:'08 41 13',due:d(8),status:'In Review'}]]]];
+ await w(async()=>{for(const[n,a,t,its]of S){const{data,error}=await sb.from('projects').insert({name:n,addr:a,type:t}).select().single();if(error)return{error};const r=await sb.from('items').insert(its.map(([kind,x])=>({pid:data.id,kind,data:x})));if(r.error)return r}})}
+</script></body></html>
